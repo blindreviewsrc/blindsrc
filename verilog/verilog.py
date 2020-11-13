@@ -19,7 +19,7 @@ class VERILOGPlugin(Magics):
     def __init__(self, shell):
         super(VERILOGPlugin, self).__init__(shell)
         self.argparser = helper.get_argparser()
-        self.permission()
+        #self.permission()
     '''
     def permission(self):
         args = ["chmod", "a+x", "-R", "/content/blindsrc/verilog/"]
