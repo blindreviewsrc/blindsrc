@@ -23,7 +23,7 @@ class Gem5Plugin(Magics):
     
     def updateInstall(self):
         print("Installing gem5 dependencies. Please wait... ", end="")
-        args = ["sh", "/content/nvcc4jupyter/valgrind/update_install.sh"]
+        args = ["sh", "/content/blindsrc/valgrind/update_install.sh"]
 
         output = subprocess.check_output(args, stderr=subprocess.STDOUT)
         output = output.decode('utf8')
@@ -37,7 +37,7 @@ class Gem5Plugin(Magics):
 
     def run_gem5(self, file_path, args):
 
-        arguments = ["sh", "/content/nvcc4jupyter/gem5/execute.sh", args[0], file_path + ext]
+        arguments = ["sh", "/content/blindsrc/gem5/execute.sh", args[0], file_path + ext]
 
         self.execution(arguments)
 
@@ -85,7 +85,7 @@ class Gem5Plugin(Magics):
                 else:
                     from nvcc4jupyter.gem5.examples.simple import simple_gem5
                     simple_gem5(data)
-                arguments = ["sh", "/content/nvcc4jupyter/gem5/execute.sh", data['arch'], '/content/gem5_code.py']
+                arguments = ["sh", "/content/blindsrc/gem5/execute.sh", data['arch'], '/content/gem5_code.py']
                 self.execution(arguments)
                 self.output_gem5(data)
                 #except:
