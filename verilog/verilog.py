@@ -8,7 +8,7 @@ from IPython.core.magic import Magics, cell_magic, magics_class
 from IPython.core.magic_arguments import argument, magic_arguments, parse_argstring
 from common import helper
 
-compiler = '/content/blindsrc/verilog/bin/iverilog'
+compiler = 'iverilog'
 yosys_run = '/content/blindsrc/verilog/yosys'
 script_run = '/content/blindsrc/verilog/script.ys'
 ext = '.v'
@@ -20,13 +20,13 @@ class VERILOGPlugin(Magics):
         super(VERILOGPlugin, self).__init__(shell)
         self.argparser = helper.get_argparser()
         self.permission()
-    
+    '''
     def permission(self):
         args = ["chmod", "a+x", "-R", "/content/blindsrc/verilog/"]
 
         output = subprocess.check_output(args, stderr=subprocess.STDOUT)
         output = output.decode('utf8')
-
+    '''
     @staticmethod
     def compile(file_path, flags):
         args = [compiler, file_path + ext, "-o", file_path + ".out"]
