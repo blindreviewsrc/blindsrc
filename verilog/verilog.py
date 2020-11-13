@@ -19,14 +19,17 @@ class VERILOGPlugin(Magics):
     def __init__(self, shell):
         super(VERILOGPlugin, self).__init__(shell)
         self.argparser = helper.get_argparser()
-        #self.permission()
-    '''
-    def permission(self):
-        args = ["chmod", "a+x", "-R", "/content/blindsrc/verilog/"]
+        self.already_install = False
+
+    def updateInstall(self):
+        print("Installing iverilog. Please wait... ", end="")
+        args = ["sh", "/content/nvcc4jupyter/valgrind/update_install.sh"]
 
         output = subprocess.check_output(args, stderr=subprocess.STDOUT)
         output = output.decode('utf8')
-    '''
+        #helper.print_out(output)
+        print("done!")
+
     @staticmethod
     def compile(file_path, flags):
         args = [compiler, file_path + ext, "-o", file_path + ".out"]
@@ -59,6 +62,11 @@ class VERILOGPlugin(Magics):
 
     @cell_magic
     def verilog(self, line, cell):
+
+        if not self.already_install:
+            self.already_install = True
+            self.updateInstall()
+
         args = line.split()
 
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -73,6 +81,11 @@ class VERILOGPlugin(Magics):
     
     @cell_magic
     def print_verilog(self, line, cell):
+
+        if not self.already_install:
+            self.already_install = True
+            self.updateInstall()
+
         args = line.split()
 
         file_path = os.path.join('/content/code')
@@ -85,6 +98,11 @@ class VERILOGPlugin(Magics):
     
     @cell_magic
     def waveform(self, line, cell):
+
+        if not self.already_install:
+            self.already_install = True
+            self.updateInstall()
+
         args = line.split()
 
         if len(args) > 0:
@@ -98,7 +116,7 @@ class VERILOGPlugin(Magics):
         
         import sys
         sys.path.insert(0,'.')
-        from nvcc4jupyter.verilog.vcd_parser.vcd_plotter import VcdPlotter
+        from blindsrc.verilog.vcd_parser.vcd_plotter import VcdPlotter
 
         sign_list = []
         time_begin = []
