@@ -23,7 +23,7 @@ class VERILOGPlugin(Magics):
 
     def updateInstall(self):
         print("Installing iverilog. Please wait... ", end="")
-        args = ["sh", "/content/nvcc4jupyter/valgrind/update_install.sh"]
+        args = ["sh", "/content/blindsrc/verilog/update_install.sh"]
 
         output = subprocess.check_output(args, stderr=subprocess.STDOUT)
         output = output.decode('utf8')
