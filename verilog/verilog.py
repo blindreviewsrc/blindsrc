@@ -8,9 +8,9 @@ from IPython.core.magic import Magics, cell_magic, magics_class
 from IPython.core.magic_arguments import argument, magic_arguments, parse_argstring
 from common import helper
 
-compiler = '/content/nvcc4jupyter/verilog/bin/iverilog'
-yosys_run = '/content/nvcc4jupyter/verilog/yosys'
-script_run = '/content/nvcc4jupyter/verilog/script.ys'
+compiler = '/content/blindsrc/verilog/bin/iverilog'
+yosys_run = '/content/blindsrc/verilog/yosys'
+script_run = '/content/blindsrc/verilog/script.ys'
 ext = '.v'
 
 @magics_class
