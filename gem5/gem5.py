@@ -48,7 +48,7 @@ class Gem5Plugin(Magics):
             else:
                 print("---------- Begin Simulation Statistics ----------")
                 for s in args[1:]:
-                    arguments = ["sh", "/content/nvcc4jupyter/gem5/statistic.sh", s]
+                    arguments = ["sh", "/content/blindsrc	/gem5/statistic.sh", s]
                     output = subprocess.check_output(args, stderr=subprocess.STDOUT)
                     output = output.decode('utf8')
                     helper.print_out(output.replace("\n\n","\n"))
@@ -61,7 +61,7 @@ class Gem5Plugin(Magics):
             else:
                 print("---------- Begin Simulation Statistics ----------")
                 for s in data['stats']:
-                    arguments = ["sh", "/content/nvcc4jupyter/gem5/statistic.sh", s]
+                    arguments = ["sh", "/content/blindsrc/gem5/statistic.sh", s]
                     output = subprocess.check_output(data['stats'], stderr=subprocess.STDOUT)
                     output = output.decode('utf8')
                     helper.print_out(output.replace("\n\n","\n"))
@@ -80,10 +80,10 @@ class Gem5Plugin(Magics):
                 import sys
                 sys.path.insert(0,'.')
                 if bool_with_cache:
-                    from nvcc4jupyter.gem5.examples.two_level import cache_gem5
+                    from blindsrc.gem5.examples.two_level import cache_gem5
                     cache_gem5(data)
                 else:
-                    from nvcc4jupyter.gem5.examples.simple import simple_gem5
+                    from blindsrc.gem5.examples.simple import simple_gem5
                     simple_gem5(data)
                 arguments = ["sh", "/content/blindsrc/gem5/execute.sh", data['arch'], '/content/gem5_code.py']
                 self.execution(arguments)

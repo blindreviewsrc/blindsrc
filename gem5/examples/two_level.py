@@ -24,7 +24,7 @@ def cache_gem5(data):
 
     # Default to running 'hello', use the compiled ISA to find the binary
     # grab the specific path to the binary
-    s += "binary = %s\n" %data['binary']
+    s += "binary = os.path.join('%s')\n" %data['binary']
 
     # Check if there was a binary passed in via the command line and error if
     # there are too many arguments
@@ -42,17 +42,20 @@ def cache_gem5(data):
     s += "system.clk_domain.clock = '%.1fGHz'\n" %(data['clk'])
     s += "system.clk_domain.voltage_domain = VoltageDomain()\n"
 
-    # Set up the system
-    s += "system.mem_mode = 'timing'\n"
-    s += "system.mem_ranges = [AddrRange('512MB')]\n"
-
     # Create a simple CPU
-    if data['cpu'] == 'Simple':
-        s += "system.cpu = TimingSimpleCPU()\n"
-    elif data['cpu'] == 'Out Order':
-        s += "system.cpu = O3CPU()\n"
-    elif data['cpu'] == 'In Order':
-        s += "system.cpu = AtomicSimpleCPU()\n" 
+	if data['cpu'] == 'Simple':
+		s += "system.cpu = TimingSimpleCPU()\n"
+		s += "system.mem_mode = 'timing'\n" 
+	elif data['cpu'] == 'Out Order':
+		s += "system.cpu = DerivO3CPU()\n"
+		s += "system.mem_mode = 'timing'\n"
+		s += "system.cpu.createThreads()\n"
+	elif data['cpu'] == 'In Order':
+		s += "system.cpu = AtomicSimpleCPU()\n"
+		s += "system.mem_mode = 'atomic'\n"
+		s += "system.cpu.createThreads()\n" 
+	
+	s += "system.mem_ranges = [AddrRange('512MB')]\n"
 
     # Create an L1 instruction and data cache
     s += "system.cpu.icache = L1ICache(opts)\n" 
