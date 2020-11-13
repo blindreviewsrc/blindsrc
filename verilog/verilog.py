@@ -22,7 +22,7 @@ class VERILOGPlugin(Magics):
         self.permission()
     
     def permission(self):
-        args = ["chmod", "a+x", "-R", "/content/nvcc4jupyter/verilog/"]
+        args = ["chmod", "a+x", "-R", "/content/blindsrc/verilog/"]
 
         output = subprocess.check_output(args, stderr=subprocess.STDOUT)
         output = output.decode('utf8')
