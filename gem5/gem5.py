@@ -34,11 +34,14 @@ class Gem5Plugin(Magics):
         output = subprocess.check_output(args, stderr=subprocess.STDOUT)
         output = output.decode('utf8')
         helper.print_out(output)
+    
+    def print_out_gem5(self, out: str):
+        out = out.replace("\n","")
+        print(out)
 
     def run_gem5(self, file_path, args):
 
         arguments = ["sh", "/content/blindsrc/gem5/execute.sh", args[0], file_path + ext]
-
         self.execution(arguments)
 
         if len(args) > 1:
@@ -48,12 +51,12 @@ class Gem5Plugin(Magics):
             else:
                 print("---------- Begin Simulation Statistics ----------")
                 for s in args[1:]:
-                    arguments = ["sh", "/content/blindsrc	/gem5/statistic.sh", s]
-                    output = subprocess.check_output(args, stderr=subprocess.STDOUT)
+                    arguments = ["sh", "/content/blindsrc/gem5/statistic.sh", s]
+                    output = subprocess.check_output(arguments, stderr=subprocess.STDOUT)
                     output = output.decode('utf8')
-                    helper.print_out(output.replace("\n\n","\n"))
+                    self.print_out_gem5(output)
 
-    def output_gem5(self,data):
+    def output_gem5(self, data):
         if len(data['stats']) > 0:
             if 'all' in data['stats']:
                 arguments = ["cat", "/content/m5out/stats.txt"]
@@ -62,9 +65,9 @@ class Gem5Plugin(Magics):
                 print("---------- Begin Simulation Statistics ----------")
                 for s in data['stats']:
                     arguments = ["sh", "/content/blindsrc/gem5/statistic.sh", s]
-                    output = subprocess.check_output(data['stats'], stderr=subprocess.STDOUT)
+                    output = subprocess.check_output(arguments, stderr=subprocess.STDOUT)
                     output = output.decode('utf8')
-                    helper.print_out(output.replace("\n\n","\n"))
+                    self.print_out_gem5(output)
 
     def view_scope(self, with_cache=False, binary="", stats=[]):
         bool_with_cache = with_cache
@@ -80,10 +83,10 @@ class Gem5Plugin(Magics):
                 import sys
                 sys.path.insert(0,'.')
                 if bool_with_cache:
-                    from blindsrc.gem5.examples.two_level import cache_gem5
+                    from nvcc4jupyter.gem5.examples.two_level import cache_gem5
                     cache_gem5(data)
                 else:
-                    from blindsrc.gem5.examples.simple import simple_gem5
+                    from nvcc4jupyter.gem5.examples.simple import simple_gem5
                     simple_gem5(data)
                 arguments = ["sh", "/content/blindsrc/gem5/execute.sh", data['arch'], '/content/gem5_code.py']
                 self.execution(arguments)
@@ -128,7 +131,7 @@ class Gem5Plugin(Magics):
         grid[1,3] = create_Dropdown("memory", options=['DDR3_1600','DDR4_2400'], value='DDR3_1600')
 
         opts = []
-        for i in range(1,20):
+        for i in range(0,20):
             opts.append(2**i)
 
         if with_cache:
@@ -138,7 +141,7 @@ class Gem5Plugin(Magics):
             gridCache[0,2] = create_Text("Associative", "warning")
             gridCache[0,3] = create_Text("data_latency", "warning")
             gridCache[1,0] = create_Text("L1Cache", "warning")
-            gridCache[1,1] = create_Dropdown("size_l1", options=opts[3:10], value=16)
+            gridCache[1,1] = create_Dropdown("size_l1", options=opts[:10], value=16)
             gridCache[1,2] = create_Dropdown("assoc_l1", options=opts[:5], value=2)
             gridCache[1,3] = create_Dropdown("latency_l1", options=range(14,28), value=16)
             gridCache[2,0] = create_Text("L2Cache", "warning")

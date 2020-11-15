@@ -26,14 +26,6 @@ def cache_gem5(data):
     # grab the specific path to the binary
     s += "binary = os.path.join('%s')\n" %data['binary']
 
-    # Check if there was a binary passed in via the command line and error if
-    # there are too many arguments
-    #s += "if len(args) == 1:\n"
-    #s += "    binary = args[0]\n"
-    #s += "elif len(args) > 1:\n"
-    #s += "    SimpleOpts.print_help()\n"
-    #s += "    m5.fatal(\"Expected a binary to execute as positional argument\")\n"
-
     # create the system we are going to simulate
     s += "system = System()\n"
 
@@ -43,23 +35,23 @@ def cache_gem5(data):
     s += "system.clk_domain.voltage_domain = VoltageDomain()\n"
 
     # Create a simple CPU
-	if data['cpu'] == 'Simple':
-		s += "system.cpu = TimingSimpleCPU()\n"
-		s += "system.mem_mode = 'timing'\n" 
-	elif data['cpu'] == 'Out Order':
-		s += "system.cpu = DerivO3CPU()\n"
-		s += "system.mem_mode = 'timing'\n"
-		s += "system.cpu.createThreads()\n"
-	elif data['cpu'] == 'In Order':
-		s += "system.cpu = AtomicSimpleCPU()\n"
-		s += "system.mem_mode = 'atomic'\n"
-		s += "system.cpu.createThreads()\n" 
-	
-	s += "system.mem_ranges = [AddrRange('512MB')]\n"
+    if data['cpu'] == 'Simple':
+        s += "system.cpu = TimingSimpleCPU()\n"
+        s += "system.mem_mode = 'timing'\n" 
+    elif data['cpu'] == 'Out Order':
+        s += "system.cpu = DerivO3CPU()\n"
+        s += "system.mem_mode = 'timing'\n"
+        s += "system.cpu.createThreads()\n"
+    elif data['cpu'] == 'In Order':
+        s += "system.cpu = AtomicSimpleCPU()\n"
+        s += "system.mem_mode = 'atomic'\n"
+        s += "system.cpu.createThreads()\n" 
+    
+    s += "system.mem_ranges = [AddrRange('512MB')]\n"
 
     # Create an L1 instruction and data cache
-    s += "system.cpu.icache = L1ICache(opts)\n" 
-    s += "system.cpu.dcache = L1DCache(opts)\n" 
+    s += "system.cpu.icache = L1ICache(size=16,opts=opts)\n"
+    s += "system.cpu.dcache = L1DCache(size=%d,opts=opts)\n" %(data['size_l1']) 
 
     # Connect the instruction and data caches to the CPU
     s += "system.cpu.icache.connectCPU(system.cpu)\n"
@@ -73,7 +65,7 @@ def cache_gem5(data):
     s += "system.cpu.dcache.connectBus(system.l2bus)\n"
 
     # Create an L2 cache and connect it to the l2bus
-    s += "system.l2cache = L2Cache(opts)\n"
+    s += "system.l2cache = L2Cache(size=%d,opts=opts)\n" %(data['size_l1'])
     s += "system.l2cache.connectCPUSideBus(system.l2bus)\n"
 
     # Create a memory bus
